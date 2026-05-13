@@ -1,9 +1,19 @@
 import express,{ Router } from "express";
-import { workspace } from "../controllers/workspace.controller";
+import { createWorkspace } from "../controllers/createWorkspace.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
+import { getUserWorkspace } from "../controllers/getUserWorkspaces.controller";
+import { getWorkspace } from "../controllers/getWorkspace.controller";
+import { getChannels } from "../controllers/getUserChannles.controller";
+import {createChannel} from "../controllers/CreateChannel.controller"
+
 
 const routes:Router = express.Router()
 
-routes.post("/",authMiddleware,workspace)
+routes.post("/",authMiddleware,createWorkspace)
+routes.get("/",authMiddleware,getUserWorkspace)
+routes.get("/:workspaceId",authMiddleware,getWorkspace)
+routes.post("/:workspaceId/channels",authMiddleware,createChannel)
+routes.get("/:workspaceId/channels",authMiddleware,getChannels)
+
 
 export default routes

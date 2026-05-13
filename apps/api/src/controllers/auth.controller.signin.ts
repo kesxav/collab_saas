@@ -30,8 +30,6 @@ export const signin = async (req: Request, res: Response) => {
       }
     );
 
-    console.log(JWT_SECRET)
-
    return res.status(200).json({
       token,
       message: "Logged in",

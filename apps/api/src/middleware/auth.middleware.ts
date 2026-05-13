@@ -1,8 +1,9 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/common-backend/config";
 import { Request,Response,NextFunction } from "express"
+import { prisma } from "@repo/db/db";
 
-export const authMiddleware = (req:Request,res:Response,next:NextFunction) =>{
+export const authMiddleware = async (req:Request,res:Response,next:NextFunction) =>{
     
     try {
         
@@ -12,15 +13,35 @@ export const authMiddleware = (req:Request,res:Response,next:NextFunction) =>{
                 message:"No token provided"
             })
         }
-         const verify = jwt.verify(token,JWT_SECRET)
+         const verify = jwt.verify(token,JWT_SECRET) as JwtPayload & {userId:string}
 
 
-         req.user = verify as {
-            userId:string;
+         req.userId = verify
+
+        const user=  await prisma.user.findUnique({
+            where:{
+                id: req.userId.userId
+            },
+            select:{
+                id:true,
+                username:true,
+                email:true,
+                avatar:true,
+                createdAt:true,
+            }
+         })
+
+         if(!user){
+            return res.status(401).json({
+                message: "User not found"
+            })
          }
+
+         req.user = user
        next()
          
-    }catch(error:unknown){
+    }
+    catch(error:unknown){
     return res.status(401).json({
         message: "Invalid token"
     })}

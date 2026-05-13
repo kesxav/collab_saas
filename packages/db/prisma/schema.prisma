@@ -20,6 +20,7 @@ model User {
   avatar     String?
   createdAt  DateTime    @default(now())
   workspaces Workspace[] @relation("UserWorkspaces")
+  chats      Chat[]      @relation("chatsOwner")
 }
 
 model Workspace {
@@ -35,4 +36,15 @@ model Channel {
   name        String
   workspaceId String
   workspace   Workspace @relation("WorkspaceChannels", fields: [workspaceId], references: [id])
+  chats       Chat[]    @relation("channelChats")
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  chat      String
+  channelId String
+  senderId  String
+  channel   Channel  @relation("channelChats", fields: [channelId], references: [id])
+  sender    User     @relation("chatsOwner", fields: [senderId], references: [id])
+  createdAt DateTime @default(now())
 }

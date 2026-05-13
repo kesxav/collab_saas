@@ -1,12 +1,21 @@
 import { JwtPayload } from "jsonwebtoken";
 
+type SafeUser = {
+    id: string;
+    username: string;
+    email: string;
+    avatar?: string | null;
+    createdAt: Date;
+}
+
 declare global {
     namespace Express {
         interface Request {
-            user?: JwtPayload & {
+            userId?: JwtPayload & {
                 userId: string;
             }
-            workspace?:string
+            workspaceId?:string
+            user?:SafeUser
         }
     }
 }
