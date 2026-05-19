@@ -18,8 +18,6 @@ export const createWorkspace = async (req: Request, res: Response) => {
       },
     });
 
-    console.log(addWorkspace)
-
     return res.status(201).json({
       message: "Workspace added",
     });

@@ -9,7 +9,7 @@ try{
         name: req.body.name,
         workspace: {
           connect: {
-            id: req.body.workspaceId,
+            id: req.params.workspaceId as string,
           },
         },
       },
@@ -19,6 +19,7 @@ try{
         message:"Channel created"
     })
 }catch(err){
+  console.log(err)
  return res.status(500).json({
     message:"Server Error"
  })

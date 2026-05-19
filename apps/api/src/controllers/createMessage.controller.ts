@@ -1,8 +1,11 @@
 import { prisma } from "@repo/db/db";
 import { Request, Response } from "express";
+import { getIo } from "../sockets/socket.js";
 
 export const createMessage = async (req:Request,res:Response) =>{
     try {
+        const channelId = req.params.channelId as string
+        const io = getIo()
         const chat = await prisma.chat.create({
             data:{
                 chat:req.body.message,
@@ -13,11 +16,15 @@ export const createMessage = async (req:Request,res:Response) =>{
             },
             channel:{
                 connect:{
-                    id:req.params.channelId as string
+                    id:channelId
                 }
             }
             }
         })
+
+        console.log(channelId)
+
+        io.to(channelId).emit("new-message",chat)
 
 
         return res.status(201).json({

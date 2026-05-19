@@ -1,6 +1,13 @@
+"use client"
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
+import { useEffect } from "react";
+import {socket} from "../lib/socket"
+
+
+
+
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -19,6 +26,17 @@ const ThemeImage = (props: Props) => {
 };
 
 export default function Home() {
+useEffect(()=>{
+socket.emit("join-channel","08d8191d-41dc-41a7-bdeb-f8deb99d6c26")
+
+socket.on("new-message",(message)=>{
+  console.log(message.chat)
+})
+ return ()=>{
+  socket.off("new-message")
+ }
+})
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>

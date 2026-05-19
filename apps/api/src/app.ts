@@ -1,10 +1,10 @@
-import express from "express"
+import express ,{type Express} from "express"
 import authRoutes from "./routes/auth.routes.js"
 import workspaceRoutes from "./routes/workspace.route.js"
 import channelRoutes from "./routes/channel.routes.js"
 import messageRoutes from "./routes/messages.routes.js"
 
-const app = express();
+const app:Express = express();
 
 app.use(express.json());
 
@@ -13,4 +13,4 @@ app.use("/api/workspaces",workspaceRoutes)
 app.use("/api/channels",channelRoutes)
 app.use("/api/channels",messageRoutes)
 
-app.listen(3001);
+export default app;

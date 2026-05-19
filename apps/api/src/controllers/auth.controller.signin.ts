@@ -12,7 +12,7 @@ export const signin = async (req: Request, res: Response) => {
       },
     });
 
-    const checkedPassword = user?.password && (await bcrypt.compare(req.body.password, user.password))
+    const checkedPassword = await bcrypt.compare(req.body.password, user?.password as string)
       
     if (!user || !checkedPassword) {
       return res.status(401).json({
